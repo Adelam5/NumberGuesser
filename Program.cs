@@ -29,7 +29,7 @@ namespace NumberGuesser
                     {
                         guesses.Sort();
                         Console.Write("So far you have tried: ");
-                        Console.WriteLine(string.Join(", ", guesses));
+                        Console.Write(string.Join(", ", guesses) + ". ");
                     }
                     Console.WriteLine("You have {0} attempts left.", attempts);
 
@@ -95,7 +95,7 @@ namespace NumberGuesser
         static void GetAppInfo ()
         {
             string name = "Number Guesser";
-            string version = "1.1.0";
+            string version = "1.2.0";
             string author = "Adela Merdžanić";
 
             PrintColorMessage(ConsoleColor.Green, name + ". Version: " + version + ". Author: " + author);
