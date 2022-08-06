@@ -17,33 +17,59 @@ namespace NumberGuesser
 
                 int correctNumber = random.Next(1, 100);
                 int guess = 0;
+                int attempts = 10;
+                
+                Console.WriteLine("Guesse a number from 1 to 100.");
 
-                Console.WriteLine("Guesse a number from 1 to 100");
-
-                while (guess != correctNumber)
+                while (attempts > 0 && guess != correctNumber)
                 {
+                    string message = ", please try again";
+                    
+                    Console.WriteLine("You have {0} attempts.", attempts);
+
                     string input = Console.ReadLine();
 
-                    if (!int.TryParse(input, out guess))
+                    if(!ValidateInput(input, guess))
                     {
-                        PrintColorMessage(ConsoleColor.Red, "Please enter an actual number");
                         continue;
-                    }
+                    };
+
+                    attempts--;
 
                     guess = Int32.Parse(input);
 
+                    if(attempts == 0)
+                    {
+                        message = "";
+                    }
+
                     if (guess < correctNumber)
                     {
-                        PrintColorMessage(ConsoleColor.Red, "Too low, please try again");
+                        PrintColorMessage(ConsoleColor.Red, "Too low" + message);
+                        continue;
                     }
 
                     if (guess > correctNumber)
                     {
-                        PrintColorMessage(ConsoleColor.Red, "Too high, please try again");
+                        PrintColorMessage(ConsoleColor.Red, "Too high" + message);
+                        continue;
                     }
+
+                    if (guess == correctNumber)
+                    {
+                        PrintColorMessage(ConsoleColor.Yellow, "You are CORRECT!!!");
+                        break;
+                    }
+
                 }
 
-                PrintColorMessage(ConsoleColor.Yellow, "You are CORRECT!!!");
+                if (attempts == 0)
+                {
+                    PrintColorMessage(ConsoleColor.Red, "GAME OVER!!!");
+                } else
+                {
+                    PrintColorMessage(ConsoleColor.Yellow, "Congratulations. You guessed it in " + (10 - attempts) + " attempts.");
+                }
 
                 Console.WriteLine("Play again? [Y or N]");
                 string answer = Console.ReadLine().ToUpper();
@@ -61,7 +87,7 @@ namespace NumberGuesser
         static void GetAppInfo ()
         {
             string name = "Number Guesser";
-            string version = "1.0.0";
+            string version = "1.1.0";
             string author = "Adela Merdžanić";
 
             Console.ForegroundColor = ConsoleColor.Green;
@@ -82,6 +108,25 @@ namespace NumberGuesser
             Console.ForegroundColor = color;
             Console.WriteLine(message);
             Console.ResetColor();
+        }
+
+        static bool ValidateInput(string input, int guess)
+        {
+            if (!int.TryParse(input, out guess))
+            {
+                PrintColorMessage(ConsoleColor.Red, "Please enter an actual number (integer)");
+                return false;
+            }
+
+            guess = Int32.Parse(input);
+
+            if (guess < 1 || guess > 100)
+            {
+                PrintColorMessage(ConsoleColor.Red, "Please enter a number from 1 to 100");
+                return false;
+            }
+
+            return true;
         }
     }
 }
