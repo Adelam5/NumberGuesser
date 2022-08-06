@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace NumberGuesser
 {
@@ -16,6 +17,7 @@ namespace NumberGuesser
                 int correctNumber = random.Next(1, 100);
                 int guess = 0;
                 int attempts = 10;
+                List<int> guesses = new List<int>();            
                 
                 Console.WriteLine("Guesse a number from 1 to 100.");
 
@@ -23,11 +25,17 @@ namespace NumberGuesser
                 {
                     string message = ", please try again";
                     
-                    Console.WriteLine("You have {0} attempts.", attempts);
+                    if(guesses.Count > 0)
+                    {
+                        guesses.Sort();
+                        Console.Write("So far you have tried: ");
+                        Console.WriteLine(string.Join(", ", guesses));
+                    }
+                    Console.WriteLine("You have {0} attempts left.", attempts);
 
                     string input = Console.ReadLine();
 
-                    if(!ValidateInput(input, guess))
+                    if(!ValidateInput(input, guess, guesses))
                     {
                         continue;
                     };
@@ -35,6 +43,8 @@ namespace NumberGuesser
                     attempts--;
 
                     guess = Int32.Parse(input);
+
+                    guesses.Add(guess);
 
                     if(attempts == 0)
                     {
@@ -107,7 +117,7 @@ namespace NumberGuesser
             Console.ResetColor();
         }
 
-        static bool ValidateInput(string input, int guess)
+        static bool ValidateInput(string input, int guess, List<int> guesses)
         {
             if (!int.TryParse(input, out guess))
             {
@@ -116,6 +126,12 @@ namespace NumberGuesser
             }
 
             guess = Int32.Parse(input);
+
+            if(guesses.Contains(guess))
+            {
+                PrintColorMessage(ConsoleColor.Red, "You already tried this number: " + guess);
+                return false;
+            }
 
             if (guess < 1 || guess > 100)
             {
