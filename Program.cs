@@ -7,10 +7,8 @@ namespace NumberGuesser
         static void Main(string[] args)
         {
             GetAppInfo();
-
             GreetUser();
 
-         
             while (true)
             {
                 Random random = new Random();
@@ -43,6 +41,12 @@ namespace NumberGuesser
                         message = "";
                     }
 
+                    if (guess == correctNumber)
+                    {
+                        PrintColorMessage(ConsoleColor.Yellow, "You are CORRECT!!!");
+                        break;
+                    }
+
                     if (guess < correctNumber)
                     {
                         PrintColorMessage(ConsoleColor.Red, "Too low" + message);
@@ -53,12 +57,6 @@ namespace NumberGuesser
                     {
                         PrintColorMessage(ConsoleColor.Red, "Too high" + message);
                         continue;
-                    }
-
-                    if (guess == correctNumber)
-                    {
-                        PrintColorMessage(ConsoleColor.Yellow, "You are CORRECT!!!");
-                        break;
                     }
 
                 }
@@ -90,9 +88,8 @@ namespace NumberGuesser
             string version = "1.1.0";
             string author = "Adela Merdžanić";
 
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("{0}. Version: {1}. Author: {2}", name, version, author);
-            Console.ResetColor();
+            PrintColorMessage(ConsoleColor.Green, name + ". Version: " + version + ". Author: " + author);
+
         }
 
         static void GreetUser()
